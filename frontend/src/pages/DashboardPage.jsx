@@ -148,8 +148,8 @@ export default function DashboardPage() {
         <h2 style={{fontFamily:'var(--font-display)', fontSize:'22px', letterSpacing:'1px', marginBottom:'14px'}}>QUICK ACTIONS</h2>
         <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
           <Link to="/exercises" className="btn btn-primary"><Dumbbell size={16}/> Add Exercise</Link>
-          <Link to="/plans" className="btn btn-secondary">📋 Create Plan</Link>
-          <Link to="/checklist" className="btn btn-secondary">✅ Start Workout</Link>
+          <Link to="/plans" className="btn btn-secondary">Create Plan</Link>
+          <Link to="/checklist" className="btn btn-secondary">Start Workout</Link>
           <Link to="/stats" className="btn btn-ghost"><TrendingUp size={16}/> View Stats</Link>
         </div>
       </div>

@@ -1,33 +1,13 @@
-# 🔥 DailyFit — Strong Energy
+# 🔥 DailyFit 
 
-Aplikasi fitness tracker full-stack dengan tema Strong Energy (merah-orange).
+Aplikasi pendukung workout + fitness tracker.
 
 ## Stack
 - **Frontend**: React + Vite, React Router, Recharts, Lucide Icons
 - **Backend**: Express.js, MySQL, JWT Auth
 - **Font**: Bebas Neue (display) + Barlow (body)
 
----
 
-## ⚙️ Setup
-
-### 1. Database MySQL
-
-Buka MySQL dan jalankan SQL berikut:
-
-```bash
-mysql -u root -p < backend/config/init.sql
-```
-
-### 2. Backend
-
-```bash
-cd backend
-npm install
-cp .env.example .env
-# Edit .env → isi DB_PASSWORD dan JWT_SECRET kamu
-npm run dev
-```
 
 **Isi `.env`:**
 ```
@@ -40,15 +20,6 @@ JWT_SECRET=GANTI_INI_DENGAN_STRING_RANDOM_PANJANG
 PORT=5000
 ```
 
-### 3. Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
 
 ## 🌐 URL
 
