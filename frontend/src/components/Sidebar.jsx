@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Dumbbell, CalendarCheck, ClipboardList, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, Dumbbell, CalendarCheck, ClipboardList, BarChart3, LogOut } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
@@ -13,7 +13,6 @@ const navItems = [
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = () => { logout(); navigate('/login'); };
 
   return (
@@ -31,7 +30,7 @@ export default function Sidebar() {
             end={end}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
-            <Icon className="nav-icon" />
+            <Icon className="nav-icon" size={18} />
             {label}
           </NavLink>
         ))}
@@ -45,7 +44,9 @@ export default function Sidebar() {
             <div className="user-email">{user?.email}</div>
           </div>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>SIGN OUT</button>
+        <button className="logout-btn" onClick={handleLogout}>
+          <LogOut size={14} /> SIGN OUT
+        </button>
       </div>
     </aside>
   );

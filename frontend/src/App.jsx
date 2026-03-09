@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import useIsMobile from './hooks/UseisMobile';
 import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
+import BottomNav from './components/BottomNav';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -11,12 +14,25 @@ import StatsPage from './pages/StatsPage';
 
 function ProtectedLayout({ children }) {
   const { user, loading } = useAuth();
+  const isMobile = useIsMobile(768);
+
   if (loading) return <div className="loader" style={{marginTop: '40vh'}} />;
   if (!user) return <Navigate to="/login" replace />;
+
   return (
     <div className="app-layout">
-      <Sidebar />
-      <main className="main-content animate-in">{children}</main>
+      {isMobile ? (
+        <>
+          <TopBar />
+          <main className="main-content animate-in">{children}</main>
+          <BottomNav />
+        </>
+      ) : (
+        <>
+          <Sidebar />
+          <main className="main-content animate-in">{children}</main>
+        </>
+      )}
     </div>
   );
 }
