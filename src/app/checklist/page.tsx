@@ -95,10 +95,10 @@ export default function ChecklistPage() {
       <div className="flex-1 md:ml-[240px]">
         <TopBar />
         <main className="px-4 md:px-8 pt-20 md:pt-10 pb-28 md:pb-10 max-w-2xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+          <div className="mb-6">
             <h1 className="font-display text-5xl tracking-wider text-fire-grad leading-none">DAILY CHECKLIST</h1>
             <p className="text-stone-500 text-sm mt-1">Track your exercises day by day</p>
-          </motion.div>
+          </div>
 
           {/* Date strip */}
           <div className="flex gap-1.5 mb-6 overflow-x-auto pb-1">
@@ -118,7 +118,7 @@ export default function ChecklistPage() {
 
           {/* Progress */}
           {total > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-stone-900 border border-stone-700/50 rounded-2xl p-4 mb-5">
+            <div className="bg-stone-900 border border-stone-700/50 rounded-2xl p-4 mb-5">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   {pct === 100 ? <Flame size={18} className="text-amber-500 animate-pulse" /> : null}
@@ -131,10 +131,9 @@ export default function ChecklistPage() {
                   className="h-full bg-fire-grad rounded-full" />
               </div>
               {pct === 100 && (
-                <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-                  className="text-center text-xs font-bold text-amber-500 mt-2">🔥 WORKOUT COMPLETE! CRUSHING IT!</motion.p>
+                <p className="text-center text-xs font-bold text-amber-500 mt-2">WORKOUT COMPLETE! CRUSHING IT!</p>
               )}
-            </motion.div>
+            </div>
           )}
 
           {/* Actions */}
@@ -155,9 +154,8 @@ export default function ChecklistPage() {
           ) : (
             <div className="space-y-2">
               <AnimatePresence>
-                {checklist.map((item, i) => (
-                  <motion.div key={item.id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }}
-                    transition={{ delay: i * 0.04 }}
+                {checklist.map((item) => (
+                  <motion.div key={item.id} exit={{ opacity: 0, x: 16 }}
                     className={`flex items-center gap-3 p-4 rounded-2xl border transition-all group ${
                       item.isCompleted ? 'bg-emerald-950/20 border-emerald-800/25' : 'bg-stone-900 border-stone-700/50 hover:border-stone-600/70'
                     }`}>

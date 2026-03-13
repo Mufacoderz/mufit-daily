@@ -9,7 +9,7 @@ import BottomNav from '@/components/BottomNav'
 import Modal from '@/components/Modal'
 import Button from '@/components/Button'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Pencil, Trash2, Dumbbell, Layers, Search } from 'lucide-react'
+import { Plus, Pencil, Trash2, Layers, Search } from 'lucide-react'
 
 const CATEGORIES = ['strength', 'cardio', 'flexibility', 'balance']
 const MUSCLES = ['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps', 'Core', 'Legs', 'Glutes', 'Full Body']
@@ -129,10 +129,10 @@ export default function ExercisesPage() {
         <TopBar />
         <main className="px-4 md:px-8 pt-20 md:pt-10 pb-28 md:pb-10 max-w-5xl mx-auto">
           <div className="flex items-start justify-between mb-6">
-            <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
+            <div>
               <h1 className="font-display text-5xl tracking-wider text-fire-grad leading-none">EXERCISES</h1>
               <p className="text-stone-500 text-sm mt-1">{exercises.length} exercises in your library</p>
-            </motion.div>
+            </div>
             <Button onClick={() => { setEditing(null); setShowModal(true) }}><Plus size={15} /> Add Exercise</Button>
           </div>
 
@@ -176,9 +176,8 @@ export default function ExercisesPage() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <AnimatePresence>
-                {filtered.map((ex, i) => (
-                  <motion.div key={ex.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                    whileHover={{ y: -3 }}
+                {filtered.map((ex) => (
+                  <motion.div key={ex.id} whileHover={{ y: -3 }}
                     className="bg-stone-900 border border-stone-700/50 rounded-2xl p-4 relative overflow-hidden group">
                     <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-fire-grad" />
                     <div className="pl-2">

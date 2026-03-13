@@ -129,10 +129,10 @@ export default function PlansPage() {
         <TopBar />
         <main className="px-4 md:px-8 pt-20 md:pt-10 pb-28 md:pb-10 max-w-5xl mx-auto">
           <div className="flex items-start justify-between mb-6">
-            <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
+            <div>
               <h1 className="font-display text-5xl tracking-wider text-fire-grad leading-none">WORKOUT PLANS</h1>
               <p className="text-stone-500 text-sm mt-1">{plans.length} custom plans</p>
-            </motion.div>
+            </div>
             <Button onClick={() => { setEditing(null); setShowModal(true) }}><Plus size={15} /> New Plan</Button>
           </div>
 
@@ -147,9 +147,9 @@ export default function PlansPage() {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {plans.map((plan, i) => (
-                <motion.div key={plan.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
-                  whileHover={{ y: -3 }} className="bg-stone-900 border border-stone-700/50 rounded-2xl overflow-hidden flex flex-col">
+              {plans.map((plan) => (
+                <motion.div key={plan.id} whileHover={{ y: -3 }}
+                  className="bg-stone-900 border border-stone-700/50 rounded-2xl overflow-hidden flex flex-col">
                   <div className="bg-fire-grad p-4">
                     <div className="font-display text-xl tracking-wider text-white">{plan.name}</div>
                     {plan.description && <div className="text-xs text-white/70 mt-1">{plan.description}</div>}

@@ -20,14 +20,13 @@ export default function DashboardPage() {
   const today = new Date().toISOString().split('T')[0]
 
   useEffect(() => {
-  console.log('Dashboard - loading:', loading, 'user:', user)
-  if (!loading && !user) {
-    setTimeout(() => {
-      window.location.replace('/login')
-    }, 500)
-  }
-}, [user, loading])
-
+    console.log('Dashboard - loading:', loading, 'user:', user)
+    if (!loading && !user) {
+      setTimeout(() => {
+        window.location.replace('/login')
+      }, 500)
+    }
+  }, [user, loading])
 
   useEffect(() => {
     if (!user) return
@@ -39,11 +38,11 @@ export default function DashboardPage() {
   }, [user])
 
   if (loading) return (
-  <div className="min-h-screen bg-stone-950 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-stone-700 border-t-ember-500 rounded-full animate-spin" />
-  </div>
-)
-if (!user) return null
+    <div className="min-h-screen bg-stone-950 flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-stone-700 border-t-ember-500 rounded-full animate-spin" />
+    </div>
+  )
+  if (!user) return null
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'GOOD MORNING' : hour < 17 ? 'GOOD AFTERNOON' : 'GOOD EVENING'
@@ -59,26 +58,25 @@ if (!user) return null
         <main className="px-4 md:px-8 pt-20 md:pt-10 pb-28 md:pb-10 max-w-5xl mx-auto">
 
           {/* Hero greeting */}
-          <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <div className="mb-8">
             <p className="text-stone-500 text-sm font-bold tracking-widest uppercase mb-1">{greeting}</p>
             <h1 className="font-display text-5xl md:text-6xl tracking-wider leading-none">
               <span className="text-fire-grad">{user.name.toUpperCase()}</span>
             </h1>
             <p className="text-stone-400 mt-2 text-sm">Here's your fitness overview for today</p>
-          </motion.div>
+          </div>
 
           {/* Stat cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-            <StatCard value={stats?.streak ?? 0} label="Day Streak" icon={<Flame size={36} />} delay={0.05} />
-            <StatCard value={stats?.totalExercises ?? 0} label="Exercises" icon={<Dumbbell size={36} />} delay={0.1} />
-            <StatCard value={stats?.totalWorkoutDays ?? 0} label="Workout Days" icon={<Calendar size={36} />} delay={0.15} />
-            <StatCard value={`${stats?.completionRate ?? 0}%`} label="Completion" icon={<TrendingUp size={36} />} delay={0.2} />
+            <StatCard value={stats?.streak ?? 0} label="Day Streak" icon={<Flame size={36} />} delay={0} />
+            <StatCard value={stats?.totalExercises ?? 0} label="Exercises" icon={<Dumbbell size={36} />} delay={0} />
+            <StatCard value={stats?.totalWorkoutDays ?? 0} label="Workout Days" icon={<Calendar size={36} />} delay={0} />
+            <StatCard value={`${stats?.completionRate ?? 0}%`} label="Completion" icon={<TrendingUp size={36} />} delay={0} />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             {/* Today checklist */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
+            <div className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-display text-xl tracking-wider text-white">TODAY'S WORKOUT</h2>
                 <Link href="/checklist" className="flex items-center gap-1 text-xs font-bold text-ember-500 hover:text-ember-400 transition-colors">
@@ -96,7 +94,7 @@ if (!user) return null
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
+                        transition={{ duration: 0.8 }}
                         className="h-full bg-fire-grad rounded-full"
                       />
                     </div>
@@ -133,11 +131,10 @@ if (!user) return null
                   </Link>
                 </div>
               )}
-            </motion.div>
+            </div>
 
-            {/* Weekly bar */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
+            {/* Weekly bar chart — animasi height dipertahankan */}
+            <div className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
               <h2 className="font-display text-xl tracking-wider text-white mb-5">WEEKLY PROGRESS</h2>
               <div className="flex items-end gap-2 h-28">
                 {weekly.map((d: any, i: number) => {
@@ -148,7 +145,7 @@ if (!user) return null
                       <motion.div
                         initial={{ height: 0 }}
                         animate={{ height: d.total > 0 ? `${Math.max(pct * 88, 8)}px` : '4px' }}
-                        transition={{ delay: 0.4 + i * 0.06, duration: 0.5 }}
+                        transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
                         className={`w-full rounded-lg ${isToday ? 'bg-fire-grad shadow-fire' : d.total > 0 ? 'bg-ember-700/40' : 'bg-stone-800'}`}
                       />
                       <span className={`text-[10px] font-black tracking-wider uppercase ${isToday ? 'text-ember-500' : 'text-stone-600'}`}>
@@ -163,11 +160,11 @@ if (!user) return null
                   Full Statistics <ChevronRight size={12} />
                 </motion.div>
               </Link>
-            </motion.div>
+            </div>
           </div>
 
           {/* Quick actions */}
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-5">
+          <div className="mt-5">
             <h2 className="font-display text-xl tracking-wider text-stone-400 mb-3">QUICK ACTIONS</h2>
             <div className="flex flex-wrap gap-2">
               {[
@@ -184,7 +181,7 @@ if (!user) return null
                 </Link>
               ))}
             </div>
-          </motion.div>
+          </div>
         </main>
       </div>
       <BottomNav />
