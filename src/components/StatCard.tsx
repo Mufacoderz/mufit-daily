@@ -22,9 +22,7 @@ export default function StatCard({ value, label, icon, delay = 0 }: StatCardProp
       <div className="absolute top-4 right-4 text-stone-700 group-hover:text-stone-600 transition-colors">
         {icon}
       </div>
-      <div className="font-display text-4xl tracking-wide text-white leading-none mb-1">
-        {value}
-      </div>
+      <div className="font-display text-4xl tracking-wide text-white leading-none mb-1">{value}</div>
       <div className="text-xs font-bold text-stone-500 tracking-widest uppercase">{label}</div>
     </motion.div>
   )

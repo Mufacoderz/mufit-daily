@@ -14,11 +14,7 @@ export default function StudioHomePage() {
   const [checklist, setChecklist] = useState<any[]>([])
   const today = new Date().toISOString().split('T')[0]
 
-  useEffect(() => {
-    if (!loading && !user) {
-      window.location.replace('/login')
-    }
-  }, [user, loading])
+  useEffect(() => { if (!loading && !user) window.location.replace('/login') }, [user, loading])
 
   useEffect(() => {
     if (!user) return
@@ -48,7 +44,6 @@ export default function StudioHomePage() {
 
   return (
     <div>
-      {/* Hero greeting */}
       <div className="mb-8">
         <p className="text-stone-500 text-sm font-bold tracking-widest uppercase mb-1">{greeting}</p>
         <h1 className="font-display text-5xl md:text-6xl tracking-wider leading-none">
@@ -59,7 +54,6 @@ export default function StudioHomePage() {
         <p className="text-stone-400 mt-2 text-sm">Here's your fitness overview for today</p>
       </div>
 
-      {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard value={stats?.streak ?? 0} label="Day Streak" icon={<Flame size={36} />} delay={0} />
         <StatCard value={stats?.totalExercises ?? 0} label="Exercises" icon={<Dumbbell size={36} />} delay={0} />
@@ -68,7 +62,6 @@ export default function StudioHomePage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        {/* Today checklist */}
         <div className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-xl tracking-wider text-white">TODAY'S WORKOUT</h2>
@@ -84,12 +77,8 @@ export default function StudioHomePage() {
                   <span className="text-ember-500">{done}/{total}</span>
                 </div>
                 <div className="h-2 bg-stone-800 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${pct}%` }}
-                    transition={{ duration: 0.8 }}
-                    className="h-full bg-fire-grad rounded-full"
-                  />
+                  <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.8 }}
+                    className="h-full bg-fire-grad rounded-full" />
                 </div>
               </div>
               <div className="space-y-2">
@@ -126,21 +115,18 @@ export default function StudioHomePage() {
           )}
         </div>
 
-        {/* Weekly bar chart */}
         <div className="bg-stone-900 border border-stone-700/50 rounded-2xl p-5">
           <h2 className="font-display text-xl tracking-wider text-white mb-5">WEEKLY PROGRESS</h2>
           <div className="flex items-end gap-2 h-28">
             {weekly.map((d: any, i: number) => {
-              const pct = d.total > 0 ? d.completed / d.total : 0
+              const p = d.total > 0 ? d.completed / d.total : 0
               const isToday = d.date === today
               return (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <motion.div
-                    initial={{ height: 0 }}
-                    animate={{ height: d.total > 0 ? `${Math.max(pct * 88, 8)}px` : '4px' }}
+                  <motion.div initial={{ height: 0 }}
+                    animate={{ height: d.total > 0 ? `${Math.max(p * 88, 8)}px` : '4px' }}
                     transition={{ delay: 0.1 + i * 0.06, duration: 0.5 }}
-                    className={`w-full rounded-lg ${isToday ? 'bg-fire-grad shadow-fire' : d.total > 0 ? 'bg-ember-700/40' : 'bg-stone-800'}`}
-                  />
+                    className={`w-full rounded-lg ${isToday ? 'bg-fire-grad shadow-fire' : d.total > 0 ? 'bg-ember-700/40' : 'bg-stone-800'}`} />
                   <span className={`text-[10px] font-black tracking-wider uppercase ${isToday ? 'text-ember-500' : 'text-stone-600'}`}>
                     {d.day}
                   </span>
@@ -156,7 +142,6 @@ export default function StudioHomePage() {
         </div>
       </div>
 
-      {/* Quick actions */}
       <div className="mt-5">
         <h2 className="font-display text-xl tracking-wider text-stone-400 mb-3">QUICK ACTIONS</h2>
         <div className="flex flex-wrap gap-2">

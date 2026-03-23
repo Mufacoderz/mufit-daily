@@ -18,20 +18,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-  try {
-    const t = localStorage.getItem('df_token')
-    const u = localStorage.getItem('df_user')
-    console.log('AuthContext init - token:', !!t, 'user:', u)
-    if (t && u) {
-      setToken(t)
-      setUser(JSON.parse(u))
+    try {
+      const t = localStorage.getItem('df_token')
+      const u = localStorage.getItem('df_user')
+      if (t && u) { setToken(t); setUser(JSON.parse(u)) }
+    } catch (e) {
+      console.error('AuthContext error:', e)
+    } finally {
+      setLoading(false)
     }
-  } catch (e) {
-    console.error('AuthContext error:', e)
-  } finally {
-    setLoading(false)
-  }
-}, [])
+  }, [])
 
   const login = (t: string, u: User) => {
     localStorage.setItem('df_token', t)
