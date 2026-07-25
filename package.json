@@ -46,6 +46,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.0.1",
+    "devmap": "file:../Devmap Workspace/devmap/artifacts/devmap-0.1.0.tgz",
     "eslint": "^8",
     "eslint-config-next": "15.1.0",
     "postcss": "^8",

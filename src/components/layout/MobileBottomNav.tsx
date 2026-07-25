@@ -32,7 +32,7 @@ export function MobileBottomNav() {
         }}
       >
         <div className="grid grid-cols-5 relative px-1 py-1">
-          {hasActiveItem && (
+          {/* {hasActiveItem && (
             <motion.div
               className="absolute top-1 bottom-1 rounded-2xl"
               style={{
@@ -43,7 +43,7 @@ export function MobileBottomNav() {
               animate={{ left: `calc(${activeIndex * 20}%)` }}
               transition={{ type: "spring", stiffness: 350, damping: 35 }}
             />
-          )}
+          )} */}
 
           {NAV.map((item) => {
             const Icon = item.icon;
