@@ -3,7 +3,12 @@
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
 import { CATEGORY_LABEL, type ExerciseCategory } from "@/types";
 
-const PIE_COLORS = ["#f97316", "#C41230", "#22c55e", "#3b82f6"];
+const PIE_COLORS = [
+  "#C41230",
+  "#f97316",
+  "#3b82f6",
+  "#22c55e", 
+];
 
 interface Props {
   data: { name: string; value: number }[];
