@@ -454,7 +454,22 @@ export default function TodayPage() {
 
       {/* Checklist items */}
       {isLoading ? (
-        <div className="text-muted-foreground text-sm">Memuat...</div>
+        <div className="space-y-2">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-2xl border p-4 flex items-center gap-3 animate-pulse"
+              style={{ borderColor: "rgba(0,0,0,0.07)" }}
+            >
+              <div className="h-5 w-5 rounded bg-slate-200 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-3/5 rounded bg-slate-200" />
+                <div className="h-3 w-1/4 rounded bg-slate-100" />
+              </div>
+              <div className="h-8 w-8 rounded-xl bg-slate-200" />
+            </div>
+          ))}
+        </div>
       ) : !items.length ? (
         <div className="border-2 border-dashed rounded-2xl p-12 text-center space-y-3">
           <CalendarCheck2 className="h-12 w-12 mx-auto text-slate-300" />
