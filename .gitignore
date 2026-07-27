@@ -1,7 +1,5 @@
 .env
-
 /node_modules
 /.next
-
-node_modules
 .devmap/
+tsconfig.tsbuildinfo
