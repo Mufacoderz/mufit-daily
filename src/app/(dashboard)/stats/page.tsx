@@ -69,7 +69,8 @@ export default function StatsPage() {
       a.download = `dailyfit-laporan-${type}-${new Date().toISOString().slice(0, 10)}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
-    } catch {
+    } catch (err) {
+      console.error("Export PDF gagal:", err);
       toast.error("Gagal mengekspor laporan, coba lagi.");
     } finally {
       setExporting(null);

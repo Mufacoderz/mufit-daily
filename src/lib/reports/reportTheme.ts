@@ -1,17 +1,19 @@
 import { StyleSheet, Font } from "@react-pdf/renderer";
 import { ExerciseCategory } from "@prisma/client";
-import path from "path";
+import { join } from "node:path";
+
+const fontDir = join(process.cwd(), "public/fonts");
 
 Font.register({
   family: "DM Sans",
   fonts: [
-    { src: path.join(process.cwd(), "public/fonts/DMSansVariable.ttf"), fontWeight: 400 },
-    { src: path.join(process.cwd(), "public/fonts/DMSansVariable.ttf"), fontWeight: 700 },
+    { src: join(fontDir, "DMSansVariable.ttf"), fontWeight: 400 },
+    { src: join(fontDir, "DMSansVariable.ttf"), fontWeight: 700 },
   ],
 });
 Font.register({
   family: "Barlow Condensed",
-  fonts: [{ src: path.join(process.cwd(), "public/fonts/BarlowCondensed-Bold.ttf"), fontWeight: 700 }],
+  fonts: [{ src: join(fontDir, "BarlowCondensed-Bold.ttf"), fontWeight: 700 }],
 });
 
 export const CRIMSON = "#C41230";
