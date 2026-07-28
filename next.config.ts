@@ -4,8 +4,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**.googleusercontent.com" },
-      { protocol: "https", hostname: "**.supabase.co" },
     ],
+  },
+  outputFileTracingIncludes: {
+    "/api/reports/*": ["./public/fonts/**/*"],
   },
 };
 
