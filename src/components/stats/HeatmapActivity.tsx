@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 const BLAZE_THRESHOLD = 15;
 
@@ -53,11 +53,14 @@ function buildGrid(): Date[][] {
 const MONTH_LABELS = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
 const DAY_LABELS = ["Min","","Sel","","Kam","","Sab"];
 
-const CELL = 13;
+const MIN_CELL = 13;
+const MAX_CELL = 20;
 const GAP = 3;
+const DAY_LABEL_W = 28;
 
 export function ActivityHeatmap() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = useState(MIN_CELL);
   const [tooltip, setTooltip] = useState<{
     date: string; count: number; x: number; y: number;
   } | null>(null);
@@ -68,6 +71,27 @@ export function ActivityHeatmap() {
   });
 
   const weeks = buildGrid();
+  const CELL = cellSize;
+
+  // Stretch cells to fill the card on wide screens; on narrow screens
+  // (mobile) fall back to MIN_CELL and let the row scroll horizontally,
+  // same as before.
+  useLayoutEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const recompute = () => {
+      const available = el.clientWidth - DAY_LABEL_W;
+      const totalGap = (weeks.length - 1) * GAP;
+      const raw = (available - totalGap) / weeks.length;
+      setCellSize(Math.min(MAX_CELL, Math.max(MIN_CELL, Math.floor(raw))));
+    };
+
+    recompute();
+    const ro = new ResizeObserver(recompute);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [weeks.length]);
 
   const monthPositions: { label: string; col: number }[] = [];
   let lastMonth = -1;
@@ -86,7 +110,6 @@ export function ActivityHeatmap() {
     ? Object.values(heatmapData).filter((v) => v > 0).length
     : 0;
 
-  const DAY_LABEL_W = 28;
   const gridW = weeks.length * (CELL + GAP) - GAP;
   const totalW = DAY_LABEL_W + gridW;
 
@@ -128,9 +151,10 @@ export function ActivityHeatmap() {
         </div>
       </div>
 
-      {/* Scrollable graph */}
+      {/* Scrollable graph — this div's own width (not its child's) is what
+          we measure to decide how big the cells should be */}
       <div
-        ref={containerRef}
+        ref={wrapperRef}
         className="overflow-x-auto scrollbar-hide"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
@@ -188,7 +212,7 @@ export function ActivityHeatmap() {
                         style={{
                           width: CELL,
                           height: CELL,
-                          borderRadius: 2,
+                          borderRadius: Math.max(2, Math.round(CELL / 6)),
                           background: isBlaze ? undefined : color,
                           border: isToday
                             ? "1.5px solid #C41230"
