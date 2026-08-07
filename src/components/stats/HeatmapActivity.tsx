@@ -1,10 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 const BLAZE_THRESHOLD = 15;
-
 const LEVEL_COLORS = [
   "rgba(196,18,48,0.08)",
   "#fca5a5",
@@ -36,7 +35,6 @@ function buildGrid(): Date[][] {
   const dayOfWeek = today.getDay();
   const endSunday = new Date(today);
   endSunday.setDate(today.getDate() + (6 - dayOfWeek));
-
   const weeks: Date[][] = [];
   for (let w = 51; w >= 0; w--) {
     const week: Date[] = [];
@@ -50,19 +48,20 @@ function buildGrid(): Date[][] {
   return weeks;
 }
 
-const MONTH_LABELS = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-const DAY_LABELS = ["Min","","Sel","","Kam","","Sab"];
+const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const DAY_LABELS = ["Min", "", "Sel", "", "Kam", "", "Sab"];
 
+// Minimum readable/tappable cell size. Below this the grid scrolls horizontally.
 const MIN_CELL = 13;
-const MAX_CELL = 20;
 const GAP = 3;
 const DAY_LABEL_W = 28;
 
 export function ActivityHeatmap() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [cellSize, setCellSize] = useState(MIN_CELL);
   const [tooltip, setTooltip] = useState<{
-    date: string; count: number; x: number; y: number;
+    date: string;
+    count: number;
+    x: number;
+    y: number;
   } | null>(null);
 
   const { data: heatmapData, isLoading } = useQuery<Record<string, number>>({
@@ -71,27 +70,6 @@ export function ActivityHeatmap() {
   });
 
   const weeks = buildGrid();
-  const CELL = cellSize;
-
-  // Stretch cells to fill the card on wide screens; on narrow screens
-  // (mobile) fall back to MIN_CELL and let the row scroll horizontally,
-  // same as before.
-  useLayoutEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-
-    const recompute = () => {
-      const available = el.clientWidth - DAY_LABEL_W;
-      const totalGap = (weeks.length - 1) * GAP;
-      const raw = (available - totalGap) / weeks.length;
-      setCellSize(Math.min(MAX_CELL, Math.max(MIN_CELL, Math.floor(raw))));
-    };
-
-    recompute();
-    const ro = new ResizeObserver(recompute);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [weeks.length]);
 
   const monthPositions: { label: string; col: number }[] = [];
   let lastMonth = -1;
@@ -110,8 +88,10 @@ export function ActivityHeatmap() {
     ? Object.values(heatmapData).filter((v) => v > 0).length
     : 0;
 
-  const gridW = weeks.length * (CELL + GAP) - GAP;
-  const totalW = DAY_LABEL_W + gridW;
+  // Minimum width that keeps every cell ≥ MIN_CELL. When the container is
+  // narrower than this the inner content overflows and the row scrolls.
+  const minGridW = weeks.length * MIN_CELL + (weeks.length - 1) * GAP;
+  const minTotalW = DAY_LABEL_W + minGridW;
 
   if (isLoading) {
     return (
@@ -123,18 +103,25 @@ export function ActivityHeatmap() {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-5" style={{ border: "1.5px solid rgba(0,0,0,0.07)" }}>
+    <div
+      className="bg-white rounded-2xl p-5"
+      style={{ border: "1.5px solid rgba(0,0,0,0.07)" }}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-4 gap-4 flex-wrap">
         <div>
-          <h2 className="font-display text-xl" style={{ color: "#0F0A0B" }}>Aktivitas Tahunan</h2>
+          <h2 className="font-display text-xl" style={{ color: "#0F0A0B" }}>
+            Aktivitas Tahunan
+          </h2>
           <p className="text-xs mt-0.5" style={{ color: "#888" }}>
             {activeDays} hari aktif · {totalChecked} total gerakan
           </p>
         </div>
         {/* Legend */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          <span className="text-[10px]" style={{ color: "#aaa" }}>Sedikit</span>
+          <span className="text-[10px]" style={{ color: "#aaa" }}>
+            Sedikit
+          </span>
           {LEVEL_COLORS.map((color, i) => (
             <div
               key={i}
@@ -147,26 +134,48 @@ export function ActivityHeatmap() {
               }}
             />
           ))}
-          <span className="text-[10px]" style={{ color: "#aaa" }}>Banyak</span>
+          <span className="text-[10px]" style={{ color: "#aaa" }}>
+            Banyak
+          </span>
         </div>
       </div>
 
-      {/* Scrollable graph — this div's own width (not its child's) is what
-          we measure to decide how big the cells should be */}
+      {/* Scrollable graph – always fills available width; scrolls only when too narrow */}
       <div
-        ref={wrapperRef}
         className="overflow-x-auto scrollbar-hide"
         style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
       >
-        <div style={{ width: totalW, paddingBottom: 4 }}>
+        <div
+          style={{
+            width: "100%",
+            minWidth: minTotalW,
+            paddingBottom: 4,
+          }}
+        >
           {/* Month labels */}
-          <div style={{ display: "flex", paddingLeft: DAY_LABEL_W, marginBottom: 4 }}>
+          <div
+            style={{
+              display: "flex",
+              paddingLeft: DAY_LABEL_W,
+              marginBottom: 4,
+              gap: GAP,
+            }}
+          >
             {weeks.map((_, wi) => {
               const pos = monthPositions.find((m) => m.col === wi);
               return (
-                <div key={wi} style={{ width: CELL + GAP, flexShrink: 0 }}>
+                <div
+                  key={wi}
+                  style={{ flex: "1 1 0", minWidth: MIN_CELL }}
+                >
                   {pos && (
-                    <span style={{ fontSize: 9, color: "#aaa", fontWeight: 500 }}>
+                    <span
+                      style={{
+                        fontSize: 9,
+                        color: "#aaa",
+                        fontWeight: 500,
+                      }}
+                    >
                       {pos.label}
                     </span>
                   )}
@@ -177,14 +186,22 @@ export function ActivityHeatmap() {
 
           {/* Day labels + grid */}
           <div style={{ display: "flex" }}>
-            {/* Day labels */}
-            <div style={{ width: DAY_LABEL_W, flexShrink: 0 }}>
+            {/* Day labels – stretch to the same height as the cells */}
+            <div
+              style={{
+                width: DAY_LABEL_W,
+                flexShrink: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: GAP,
+              }}
+            >
               {DAY_LABELS.map((label, i) => (
                 <div
                   key={i}
                   style={{
-                    height: CELL,
-                    marginBottom: i < 6 ? GAP : 0,
+                    flex: "1 1 0",
+                    minHeight: 0,
                     display: "flex",
                     alignItems: "center",
                   }}
@@ -194,10 +211,26 @@ export function ActivityHeatmap() {
               ))}
             </div>
 
-            {/* Weeks grid */}
-            <div style={{ display: "flex", gap: GAP }}>
+            {/* Weeks grid – flex columns share the remaining width equally */}
+            <div
+              style={{
+                display: "flex",
+                gap: GAP,
+                flex: 1,
+                minWidth: 0,
+              }}
+            >
               {weeks.map((week, wi) => (
-                <div key={wi} style={{ display: "flex", flexDirection: "column", gap: GAP }}>
+                <div
+                  key={wi}
+                  style={{
+                    flex: "1 1 0",
+                    minWidth: MIN_CELL,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: GAP,
+                  }}
+                >
                   {week.map((date, di) => {
                     const key = formatKey(date);
                     const count = heatmapData?.[key] ?? 0;
@@ -210,9 +243,10 @@ export function ActivityHeatmap() {
                         key={di}
                         className={isBlaze ? "heatmap-blaze" : undefined}
                         style={{
-                          width: CELL,
-                          height: CELL,
-                          borderRadius: Math.max(2, Math.round(CELL / 6)),
+                          width: "100%",
+                          aspectRatio: "1",
+                          boxSizing: "border-box",
+                          borderRadius: 2,
                           background: isBlaze ? undefined : color,
                           border: isToday
                             ? "1.5px solid #C41230"
@@ -224,7 +258,8 @@ export function ActivityHeatmap() {
                           flexShrink: 0,
                         }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1.3)";
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "scale(1.3)";
                           const rect = e.currentTarget.getBoundingClientRect();
                           setTooltip({
                             date: date.toLocaleDateString("id-ID", {
@@ -238,7 +273,8 @@ export function ActivityHeatmap() {
                           });
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+                          (e.currentTarget as HTMLDivElement).style.transform =
+                            "scale(1)";
                           setTooltip(null);
                         }}
                       />
@@ -271,7 +307,8 @@ export function ActivityHeatmap() {
             boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
           }}
         >
-          {tooltip.count > 0 ? `${tooltip.count} gerakan` : "Tidak ada"} · {tooltip.date}
+          {tooltip.count > 0 ? `${tooltip.count} gerakan` : "Tidak ada"} ·{" "}
+          {tooltip.date}
         </div>
       )}
     </div>
