@@ -149,6 +149,11 @@ export default function TodayPage() {
 
   const date = getTodayDate();
 
+  // Snapshot sekali di awal: kalau data hari ini UDAH ada di cache (revisit,
+  // bukan first load), skip entrance animation per-item biar list langsung
+  // keliatan instan tanpa nunggu fade-in 0.2s replay tiap pindah halaman.
+  const [skipEntrance] = useState(() => !!qc.getQueryData(["daily", date]));
+
   const { data: log, isLoading } = useQuery<DailyLog>({
     queryKey: ["daily", date],
     queryFn: () => fetch(`/api/daily-logs?date=${date}`).then((r) => r.json()),
@@ -485,7 +490,7 @@ export default function TodayPage() {
               <motion.div
                 key={item.id}
                 layout
-                initial={prefersReduced ? false : { opacity: 0, x: -16 }}
+                initial={prefersReduced || skipEntrance ? false : { opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 24 }}
                 transition={{ duration: 0.2 }}

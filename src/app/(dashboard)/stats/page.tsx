@@ -83,7 +83,12 @@ export default function StatsPage() {
         (r) => r.json()
       ),
     placeholderData: keepPreviousData,
-    refetchOnMount: "always",
+    // Real-time freshness abis toggle checklist di Today page udah dihandle
+    // via optimistic cache patch (updateCachedStats) + invalidateQueries(["stats"])
+    // di today/page.tsx onSettled. React Query default refetchOnMount:true udah
+    // otomatis refetch query yang di-mark stale, jadi "always" di sini cuma
+    // maksa network call tiap mount walau data masih fresh — dibuang, gak
+    // ngaruh ke real-time behavior.
   });
 
   if (isLoading) {
