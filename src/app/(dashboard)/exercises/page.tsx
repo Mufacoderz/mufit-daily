@@ -2,8 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Dumbbell, SlidersHorizontal, X } from "lucide-react";
-import { useState, useMemo, useEffect } from "react";
-import AOS from "aos";
+import { useState, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { ExerciseModal } from "@/components/exercise/ExerciseModal";
@@ -35,10 +34,6 @@ export default function ExercisesPage() {
       return catOk && musOk;
     });
   }, [data, filterCategory, filterMuscle]);
-
-  useEffect(() => {
-    AOS.refreshHard();
-  }, [filtered.length]);
 
   const handleDelete = async () => {
     if (!deleteId) return;

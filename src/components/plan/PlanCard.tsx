@@ -25,10 +25,13 @@ export function PlanCard({ plan, index, onDelete, onEdit }: Props) {
 
   return (
     <motion.div
-      data-aos="fade-right"
-      data-aos-delay={Math.min(index * 50, 300)}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.25 }}
+      initial={{ opacity: 0, x: -24 }}
+      animate={{
+        opacity: 1,
+        x: 0,
+        transition: { duration: 0.3, delay: Math.min(index * 0.05, 0.3) },
+      }}
+      exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
       className="rounded-2xl overflow-hidden"
       style={{ border: "1.5px solid rgba(0,0,0,0.08)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
     >

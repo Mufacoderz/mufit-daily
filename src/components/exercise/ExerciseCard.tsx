@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Pencil, Trash2, Dumbbell, Timer, Flame } from "lucide-react";
 import { CATEGORY_LABEL, MUSCLE_GROUP_LABEL, exerciseDetail, type Exercise, type ExerciseCategory } from "@/types";
 
@@ -22,10 +23,12 @@ export function ExerciseCard({ exercise: ex, index, onEdit, onDelete }: Props) {
   const isTime = ex.type === "TIME_BASED";
 
   return (
-    <div
-      data-aos="fade-right"
-      data-aos-delay={Math.min(index * 50, 300)}
-      className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 hover:border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex"
+    <motion.div
+      initial={{ opacity: 0, x: -24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.3) }}
+      whileHover={{ y: -4 }}
+      className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 hover:border-gray-200 hover:shadow-xl flex"
     >
       {/* Left accent bar */}
       <div className="w-1.5 flex-shrink-0" style={{ background: accent.bg }} />
@@ -97,6 +100,6 @@ export function ExerciseCard({ exercise: ex, index, onEdit, onDelete }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

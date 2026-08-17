@@ -1,10 +1,9 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useRouter, usePathname } from "next/navigation";
-import { type ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { type ReactNode } from "react";
 import { Flame } from "lucide-react";
-import AOS from "aos";
 import { Sidebar } from "./Sidebar";
 import { MobileTopbar } from "./MobileTopbar";
 import { MobileBottomNav } from "./MobileBottomNav";
@@ -13,16 +12,6 @@ import { TimerAudioProvider } from "./TimerAudioProvider";
 export function AppShell({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
-
-  // AOS cuma nge-scan DOM sekali pas init() di Providers.tsx (app pertama kali mount).
-  // Elemen data-aos yang mount belakangan (navigasi ke /exercises atau /plans di
-  // kunjungan ke-2+) gak ke-detect otomatis -> nyangkut di initial state (opacity 0)
-  // sampe ada scroll/resize yang gak sengaja ngetrigger AOS buat re-check posisi.
-  // Refresh tiap pathname berubah biar list item selalu ke-scan ulang & animasi jalan normal.
-  useEffect(() => {
-    AOS.refreshHard();
-  }, [pathname]);
 
   const handleSignOut = async () => {
     await signOut({ redirect: false });

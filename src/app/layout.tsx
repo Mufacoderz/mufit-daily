@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Barlow_Condensed, DM_Sans } from "next/font/google";
 import "./globals.css";
-import "aos/dist/aos.css";
 import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
 
